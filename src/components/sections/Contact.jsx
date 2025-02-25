@@ -1,6 +1,30 @@
+import { useState } from "react";
 import { RevealOnScroll } from "../RevealOnScroll";
+import emailjs from "emailjs-com";
 
 export const Contact = () => {
+  const [formDate, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+
+  const SERVICE_ID = "service_zs98yar";
+  const TEMPLATE_ID = "template_7pa0mbg";
+  const PUBLIC_KEY = "evlMkikWBW8CL4XdS";
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    emailjs
+      .sendForm(SERVICE_ID, TEMPLATE_ID, e.target, PUBLIC_KEY)
+      .then((result) => {
+        alert("Message Sent!");
+        setFormData({ name: "", email: "", message: "" });
+      })
+      .catch(() => alert("Oops! Something went wrong. Please try again."));
+  };
+
   return (
     <section
       id="contact"
@@ -12,16 +36,20 @@ export const Contact = () => {
             {" "}
             Get In Touch
           </h2>
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div className=" relative">
               <input
                 type="text"
                 id="name"
                 name="name"
                 required
+                value={formDate.name}
                 className="w-full bg-white/5 border border-white/10 rounded px-4 py-3 text-white transition 
                  focus:outline-none focus:border-blue-500 focus:bg-blue-500/5"
                 placeholder="Name..."
+                onChange={(e) =>
+                  setFormData({ ...formDate, name: e.target.value })
+                }
               />
             </div>
 
@@ -31,9 +59,13 @@ export const Contact = () => {
                 id="email"
                 name="email"
                 required
+                value={formDate.email}
                 className=" w-full bg-white/5 border border-white/10 rounded px-4 py-3 text-white transition 
                  focus:outline-none focus:border-blue-500 focus:bg-blue-500/5"
                 placeholder="example@gmail.com"
+                onChange={(e) =>
+                  setFormData({ ...formDate, email: e.target.value })
+                }
               />
             </div>
 
@@ -43,9 +75,13 @@ export const Contact = () => {
                 name="message"
                 required
                 rows={7}
+                value={formDate.message}
                 className=" w-full bg-white/5 border border-white/10 rounded px-4 py-3 text-white transition 
                  focus:outline-none focus:border-blue-500 focus:bg-blue-500/5 max-h-36 md:max-h-none"
                 placeholder="Your Message..."
+                onChange={(e) =>
+                  setFormData({ ...formDate, message: e.target.value })
+                }
               />
             </div>
 
